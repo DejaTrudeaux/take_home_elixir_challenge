@@ -16,6 +16,7 @@ defmodule CodeChallengeWeb.TodoController do
         conn
         |> put_status(400)
         |> json("Access Restricted")
+        |> Plug.Conn.halt()
   end
 end
 
@@ -32,14 +33,14 @@ end
     json(conn, mapped_todos)
   end
 
-@doc """
+  @doc """
   Renders json string for a particular list item given that item's ID, but currently
   only when the query params "?user=Kim&password=insecurepw" are included (as per instructions).
 
   Example:
     Endpoint: "/todos/1?user=Kim&password=insecurepw"
     Gives us the response: "Read the paper"
-    because ID is 1 in the list
+    for ID 1 in the list
 
     however
     Endpoint: "/todos/1" (without query params)
