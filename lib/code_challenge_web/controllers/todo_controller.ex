@@ -4,11 +4,11 @@ defmodule CodeChallengeWeb.TodoController do
   """
   use CodeChallengeWeb, :controller
 
-  plug :require_username_password when action in [:show]
+  plug :require_query_params when action in [:show]
   @todos %{1 => "Read the paper", 2 => "Wash the dishes", 3 => "Feed the cats"}
 
-  @spec require_username_password(%{query_params: any}, any) :: %{query_params: any}
-  def require_username_password(%{query_params: query_params} = conn, _opts) do
+  @spec require_query_params(%{query_params: any}, any) :: %{query_params: any}
+  def require_query_params(%{query_params: query_params} = conn, _opts) do
     case query_params do
       %{"user" => "Kim", "password" => "insecurepw"} ->
         conn
@@ -46,6 +46,10 @@ end
     Endpoint: "/todos/1" (without query params)
     Gives us the response: "Access Restricted"
     because function plug requires aforementioned query params
+
+    This method of authentication is a bad idea because you would never send a password like that
+    in a get request in the query params. Instead, you would send it in a post request and encrypt
+    the password.
   """
   @spec show(Plug.Conn.t(), map) :: Plug.Conn.t()
   def show(conn, %{"id" => id}) do
